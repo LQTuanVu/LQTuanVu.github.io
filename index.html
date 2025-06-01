@@ -32,13 +32,13 @@
 
     .falling-text {
       position: absolute;
-      color: #66ffff;
+      color: #ff6b9d;
       white-space: nowrap;
       text-shadow:
-        0 0 5px #66ffff,
-        0 0 15px #66ffff,
-        0 0 25px #66ffff,
-        2px 2px 8px rgba(0, 255, 255, 0.3);
+        0 0 15px #ff6b9d,
+        0 0 25px #ff6b9d,
+        0 0 35px #ff6b9d,
+        2px 2px 6px rgba(0,0,0,0.9);
       will-change: transform, opacity;
       pointer-events: none;
       z-index: 2;
@@ -47,45 +47,44 @@
 
     .floating-message {
       position: absolute;
-      color: #66ffff;
+      color: #ff6b9d;
       font-size: 20px;
       pointer-events: none;
       opacity: 0.2;
       transition: opacity 1.5s ease, transform 1.5s ease;
       text-shadow:
-        0 0 5px #66ffff,
-        0 0 15px #66ffff,
-        0 0 25px #66ffff,
-        2px 2px 8px rgba(0, 255, 255, 0.3);
+        0 0 15px #ff6b9d,
+        0 0 25px #ff6b9d,
+        0 0 35px #ff6b9d,
+        2px 2px 6px rgba(0,0,0,0.9);
       z-index: 0;
       transform-style: preserve-3d;
     }
 
-    #start-music {
-      position: absolute;
+    #start-btn {
+      position: fixed;
       top: 20px;
       left: 20px;
       z-index: 9999;
       padding: 10px 20px;
-      font-size: 16px;
-      background-color: #00cccc;
+      font-size: 18px;
+      background-color: #ff6b9d;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       color: white;
       cursor: pointer;
-      box-shadow: 0 0 10px #00ffff;
+      box-shadow: 0 0 15px #ff6b9d;
     }
   </style>
 </head>
 <body>
 
-<button id="start-music">Bấm để bắt đầu</button>
-
+<button id="start-btn">Bắt đầu</button>
 <canvas id="galaxy"></canvas>
 <div class="wrapper" id="wrapper3D"></div>
 
-<audio id="bg-music" autoplay loop>
-  <source src="hs.mp3" type="audio/mpeg">
+<audio id="bg-music" loop>
+  <source src="anh_nang_cua_anh.mp3" type="audio/mpeg">
   Trình duyệt của bạn không hỗ trợ phát âm thanh.
 </audio>
 
@@ -129,7 +128,7 @@
     "Chúc 1/6 thật vui vẻ nhé bé Cá!",
     "Ngập tràn tiếng cười như một cô bé nhỏ!",
     "Luôn xinh tươi, vui vẻ, hồn nhiên",
-    "✨", "🐆", "❄", "🍭"
+    "✨", "🐆", "❄", "🍭","🦈"
   ];
 
   const wrapper = document.getElementById('wrapper3D');
@@ -229,7 +228,7 @@
 <script>
   const floatingMessages = [
     'Vui tươi và hồn nhiên', 'Ngập tràn tiếng cười',
-    'Luôn xinh tươi', 'Như một cô bé nhỏ', 'Ngày tuyệt vời', 'Minh Châu'
+    'Luôn xinh tươi', 'Như một cô bé nhỏ', 'Ngày tuyệt vời'
   ];
 
   function showFloatingMessages() {
@@ -247,7 +246,7 @@
       msg.style.top = `${y}px`;
       msg.style.transform = `translateZ(${z}px)`;
 
-      document.getElementById('wrapper3D').appendChild(msg);
+      wrapper.appendChild(msg);
 
       setTimeout(() => {
         msg.style.opacity = 0;
@@ -264,10 +263,17 @@
 </script>
 
 <script>
-  document.getElementById('start-music').addEventListener('click', () => {
-    const music = document.getElementById('bg-music');
-    music.play().catch(err => console.warn('Không thể phát nhạc:', err));
-    document.getElementById('start-music').remove();
+  const music = document.getElementById('bg-music');
+  const startBtn = document.getElementById('start-btn');
+
+  startBtn.addEventListener('click', () => {
+    music.muted = false;
+    music.play().then(() => {
+      startBtn.remove(); // Ẩn nút sau khi phát nhạc
+    }).catch(err => {
+      alert("Trình duyệt chặn phát nhạc tự động. Vui lòng kiểm tra cài đặt.");
+      console.warn("Không thể phát nhạc:", err);
+    });
   });
 </script>
 
