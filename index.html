@@ -30,46 +30,63 @@
       z-index: 1;
     }
 
-    
-.falling-text {
-  position: absolute;
-  color: #ff6b9d;
-  white-space: nowrap;
-  text-shadow:
-    0 0 15px #ff6b9d,
-    0 0 25px #ff6b9d,
-    0 0 35px #ff6b9d,
-    2px 2px 6px rgba(0,0,0,0.9);
-  will-change: transform, opacity;
-  pointer-events: none;
-  z-index: 2;
-  transform-style: preserve-3d;
-}
+    .falling-text {
+      position: absolute;
+      color: #ff6b9d;
+      white-space: nowrap;
+      text-shadow:
+        0 0 15px #ff6b9d,
+        0 0 25px #ff6b9d,
+        0 0 35px #ff6b9d,
+        2px 2px 6px rgba(0,0,0,0.9);
+      will-change: transform, opacity;
+      pointer-events: none;
+      z-index: 2;
+      transform-style: preserve-3d;
+    }
 
+    .floating-message {
+      position: absolute;
+      color: #ff6b9d;
+      font-size: 20px;
+      pointer-events: none;
+      opacity: 0.2;
+      transition: opacity 1.5s ease, transform 1.5s ease;
+      text-shadow:
+        0 0 15px #ff6b9d,
+        0 0 25px #ff6b9d,
+        0 0 35px #ff6b9d,
+        2px 2px 6px rgba(0,0,0,0.9);
+      z-index: 0;
+      transform-style: preserve-3d;
+    }
 
-    
-.floating-message {
-  position: absolute;
-  color: #ff6b9d;
-  font-size: 20px;
-  pointer-events: none;
-  opacity: 0.2;
-  transition: opacity 1.5s ease, transform 1.5s ease;
-  text-shadow:
-    0 0 15px #ff6b9d,
-    0 0 25px #ff6b9d,
-    0 0 35px #ff6b9d,
-    2px 2px 6px rgba(0,0,0,0.9);
-  z-index: 0;
-  transform-style: preserve-3d;
-}
-
+    #start-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 9999;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #ff6b9d;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff6b9d;
+    }
   </style>
 </head>
 <body>
 
+<button id="start-btn">Bắt đầu</button>
 <canvas id="galaxy"></canvas>
 <div class="wrapper" id="wrapper3D"></div>
+
+<audio id="bg-music" loop>
+  <source src="anh_nang_cua_anh.mp3" type="audio/mpeg">
+  Trình duyệt của bạn không hỗ trợ phát âm thanh.
+</audio>
 
 <script>
   const canvas = document.getElementById("galaxy");
@@ -114,7 +131,6 @@
     "✨", "🐆", "❄", "🍭","🦈"
   ];
 
-
   const wrapper = document.getElementById('wrapper3D');
 
   function createFallingText() {
@@ -126,141 +142,4 @@
     const z = Math.random() * 600 - 300;
     const yStart = -100;
     const yEnd = window.innerHeight + 100;
-    const duration = 4 + Math.random() * 2;
-
-    const scale = 1 - Math.abs(z) / 1000;
-    text.style.fontSize = `${16 * scale + 10}px`;
-    text.style.left = `${x}px`;
-    text.style.top = `0px`;
-    text.style.opacity = 0;
-
-    wrapper.appendChild(text);
-
-    let startTime = null;
-
-    function animate(time) {
-      if (!startTime) startTime = time;
-      const elapsed = (time - startTime) / 1000;
-      const progress = elapsed / duration;
-
-      if (progress < 1) {
-        const y = yStart + (yEnd - yStart) * progress;
-        const opacity = 1 - progress;
-        text.style.transform = `translateZ(${z}px) translateY(${y}px) scale(${scale})`;
-        text.style.opacity = opacity;
-        requestAnimationFrame(animate);
-      } else {
-        text.remove();
-      }
-    }
-
-    requestAnimationFrame(animate);
-  }
-
-  setInterval(createFallingText, 40);
-</script>
-
-<script>
-  const wrapper3D = document.getElementById('wrapper3D');
-  let isDragging = false;
-  let lastX = 0;
-  let lastY = 0;
-  let rotateX = 0;
-  let rotateY = 0;
-
-  document.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    lastX = e.clientX;
-    lastY = e.clientY;
-  });
-
-  document.addEventListener('mouseup', () => isDragging = false);
-
-  document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    const deltaX = e.clientX - lastX;
-    const deltaY = e.clientY - lastY;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    rotateY += deltaX * 0.3;
-    rotateX -= deltaY * 0.3;
-    wrapper3D.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  });
-
-  document.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    const touch = e.touches[0];
-    lastX = touch.clientX;
-    lastY = touch.clientY;
-  }, { passive: true });
-
-  document.addEventListener('touchend', () => isDragging = false);
-
-  document.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    const touch = e.touches[0];
-    const deltaX = touch.clientX - lastX;
-    const deltaY = touch.clientY - lastY;
-    lastX = touch.clientX;
-    lastY = touch.clientY;
-    rotateY += deltaX * 0.3;
-    rotateX -= deltaY * 0.3;
-    wrapper3D.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  }, { passive: true });
-</script>
-
-<script>
-  const floatingMessages = [
-    'Vui tươi và hồn nhiên', 'Ngập tràn tiếng cười',
-    'Luôn xinh tươi', 'Như một cô bé nhỏ', 'Ngày tuyệt vời'
-  ];
-
-  function showFloatingMessages() {
-    const count = 3 + Math.floor(Math.random() * 3); // 3–5 chữ một lần
-    for (let i = 0; i < count; i++) {
-      const msg = document.createElement('div');
-      msg.className = 'floating-message';
-      msg.textContent = floatingMessages[Math.floor(Math.random() * floatingMessages.length)];
-
-      const x = Math.random() * window.innerWidth;
-      const y = Math.random() * window.innerHeight;
-      const z = Math.random() * 300 - 150;
-
-      msg.style.left = `${x}px`;
-      msg.style.top = `${y}px`;
-      msg.style.transform = `translateZ(${z}px)`;
-
-      document.getElementById('wrapper3D').appendChild(msg);
-
-      setTimeout(() => {
-        msg.style.opacity = 0;
-        msg.style.transform += ' scale(1.5)';
-      }, 50);
-
-      setTimeout(() => {
-        msg.remove();
-      }, 2000);
-    }
-  }
-
-  setInterval(showFloatingMessages, 1500); // xuất hiện chậm hơn
-</script>
-
-<audio id="bg-music" autoplay loop muted>
-  <source src="anh_nang_cua_anh.mp3" type="audio/mpeg">
-  Trình duyệt của bạn không hỗ trợ phát âm thanh.
-</audio>
-
-<script>
-  const music = document.getElementById('bg-music');
-  music.play().then(() => {
-    setTimeout(() => {
-      music.muted = false;
-    }, 1000);
-  }).catch(() => {
-    console.warn("Autoplay bị chặn.");
-  });
-</script>
-
-</body>
-</html>
+    const
