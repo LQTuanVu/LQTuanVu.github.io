@@ -90,7 +90,7 @@
     for (let star of stars) {
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.r, 0, 2 * Math.PI);
-      ctx.fillStyle = rgba(255, 255, 255, ${star.alpha});
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
       ctx.fill();
       star.alpha += star.dAlpha;
       if (star.alpha >= 1 || star.alpha <= 0) star.dAlpha *= -1;
@@ -129,9 +129,9 @@
     const duration = 4 + Math.random() * 2;
 
     const scale = 1 - Math.abs(z) / 1000;
-    text.style.fontSize = ${16 * scale + 10}px;
-    text.style.left = ${x}px;
-    text.style.top = 0px;
+    text.style.fontSize = `${16 * scale + 10}px`;
+    text.style.left = `${x}px`;
+    text.style.top = `0px`;
     text.style.opacity = 0;
 
     wrapper.appendChild(text);
@@ -146,7 +146,7 @@
       if (progress < 1) {
         const y = yStart + (yEnd - yStart) * progress;
         const opacity = 1 - progress;
-        text.style.transform = translateZ(${z}px) translateY(${y}px) scale(${scale});
+        text.style.transform = `translateZ(${z}px) translateY(${y}px) scale(${scale})`;
         text.style.opacity = opacity;
         requestAnimationFrame(animate);
       } else {
@@ -184,7 +184,7 @@
     lastY = e.clientY;
     rotateY += deltaX * 0.3;
     rotateX -= deltaY * 0.3;
-    wrapper3D.style.transform = rotateX(${rotateX}deg) rotateY(${rotateY}deg);
+    wrapper3D.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
   });
 
   document.addEventListener('touchstart', (e) => {
@@ -205,7 +205,7 @@
     lastY = touch.clientY;
     rotateY += deltaX * 0.3;
     rotateX -= deltaY * 0.3;
-    wrapper3D.style.transform = rotateX(${rotateX}deg) rotateY(${rotateY}deg);
+    wrapper3D.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
   }, { passive: true });
 </script>
 
@@ -226,9 +226,9 @@
       const y = Math.random() * window.innerHeight;
       const z = Math.random() * 300 - 150;
 
-      msg.style.left = ${x}px;
-      msg.style.top = ${y}px;
-      msg.style.transform = translateZ(${z}px);
+      msg.style.left = `${x}px`;
+      msg.style.top = `${y}px`;
+      msg.style.transform = `translateZ(${z}px)`;
 
       document.getElementById('wrapper3D').appendChild(msg);
 
@@ -247,7 +247,7 @@
 </script>
 
 <audio id="bg-music" autoplay loop muted>
-  <source src="anh_nang_cua_anh.mp3" type="audio/mpeg">
+  <source src="hs.mp3" type="audio/mpeg">
   Trình duyệt của bạn không hỗ trợ phát âm thanh.
 </audio>
 
